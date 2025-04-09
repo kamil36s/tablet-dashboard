@@ -2,9 +2,7 @@ from openai import OpenAI
 import os
 from datetime import datetime
 
-# Env keys for GitHub Actions
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI()  # Let it grab the env var
 
 def get_snail_quote():
     prompt = (
