@@ -1,0 +1,35 @@
+name: Auto update message
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # every day at 7:00 UTC
+  workflow_dispatch:    # allows manual run
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install openai
+
+      - name: Run script
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python auto_reminder_debug.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add message.txt
+          git commit -m "Update message.txt" || echo "No changes to commit"
+          git push
