@@ -1,15 +1,14 @@
-
-import openai
+from openai import OpenAI
 import requests
 import os
 from datetime import datetime
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") or "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"
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") or "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"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") or "sk-proj-..."  # Hide your actual key in public repos!
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") or "ghp_..."  # Also hide this if pushing publicly
 GIST_ID = "c360e04023681671edeb14d4a80a2369"
 GIST_FILENAME = "message.txt"
 
-openai.api_key = OPENAI_API_KEY
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 prompty = {
     "morning": "Napisz motywującą wiadomość na poranek dla osoby z ADHD i lekką depresją, maksymalnie 1 zdanie.",
@@ -19,7 +18,7 @@ prompty = {
 
 def get_message(prompt):
     print(f"🔹 Prompt: {prompt}")
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{ "role": "user", "content": prompt }]
     )
@@ -49,10 +48,6 @@ def update_gist(content):
         }
     }
     print("🟡 Sending PATCH request to GitHub Gist API...")
-    print("➡️ URL:", url)
-    print("➡️ Headers:", headers)
-    print("➡️ Data:", data)
-
     response = requests.patch(url, json=data, headers=headers)
     print("🔎 Response status code:", response.status_code)
     print("🔎 Response text:", response.text)
