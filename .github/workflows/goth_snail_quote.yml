@@ -9,19 +9,23 @@ jobs:
   update-snail:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+   steps:
+  - name: Checkout code
+    uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: pip install openai requests
+  - name: Set up Python
+    uses: actions/setup-python@v4
+    with:
+      python-version: '3.10'
 
-      - name: Run the quote script
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_PROJECT_ID: ${{ secrets.OPENAI_PROJECT_ID }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GIST_ID: ${{ secrets.GIST_ID }}
-        run: python goth_snail_quotes.py
+  - name: Install dependencies
+    run: pip install openai requests
+
+  - name: Run the quote script
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_PROJECT_ID: ${{ secrets.OPENAI_PROJECT_ID }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GIST_ID: ${{ secrets.GIST_ID }}
+    run: python goth_snail_quotes.py
+
