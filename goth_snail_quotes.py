@@ -1,11 +1,14 @@
 from openai import OpenAI
 import os
+import requests
 from datetime import datetime
 
+# Show some debug info
 print("🔐 API key starts with:", os.getenv("OPENAI_API_KEY")[:8])
 print("🧾 Project ID:", os.getenv("OPENAI_PROJECT_ID"))
+print("🟣 Gist ID:", os.getenv("GIST_ID")[:8])
 
-# Initialize client using environment variables
+# Initialize OpenAI client
 client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
     project=os.getenv("OPENAI_PROJECT_ID")
@@ -25,14 +28,33 @@ def get_snail_quote():
     print("✅ Quote:", quote)
     return quote
 
-def update_message_file(quote):
+def update_gist(quote):
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     content = f"🐌 {quote}\n\n🕒 Updated: {now}"
-    with open("message.txt", "w", encoding="utf-8") as f:
-        f.write(content)
-    print("✅ message.txt updated")
+
+    url = f"https://api.github.com/gists/{os.getenv('GIST_ID')}"
+    headers = {
+        "Authorization": f"token {os.getenv('GITHUB_TOKEN')}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+    data = {
+        "files": {
+            "message.txt": {
+                "content": content
+            }
+        }
+    }
+
+    print("📤 Sending PATCH request to update gist...")
+    response = requests.patch(url, headers=headers, json=data)
+    print("🔎 Status code:", response.status_code)
+    print("🔎 Response:", response.text)
+    if response.status_code == 200:
+        print("✅ Gist updated successfully.")
+    else:
+        print("❌ Failed to update gist.")
 
 if __name__ == "__main__":
     print("🚀 Running goth snail quote generator")
     quote = get_snail_quote()
-    update_message_file(quote)
+    update_gist(quote)
