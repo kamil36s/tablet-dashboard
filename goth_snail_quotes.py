@@ -2,7 +2,11 @@ from openai import OpenAI
 import os
 from datetime import datetime
 
-client = OpenAI()  # Let it grab the env var
+# Initialize client using environment variables
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    project=os.getenv("OPENAI_PROJECT_ID")
+)
 
 def get_snail_quote():
     prompt = (
