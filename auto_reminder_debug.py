@@ -65,4 +65,10 @@ if __name__ == "__main__":
     print("📄 Full message to upload:")
     print(full_message)
 
-    update_gist(full_message)
+    # Save locally
+    with open("message.txt", "w", encoding="utf-8") as f:
+        f.write(full_message)
+    print("✅ Local message.txt file written.")
+
+    # Optionally still update Gist
+    # update_gist(full_message)
