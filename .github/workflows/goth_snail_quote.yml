@@ -27,7 +27,7 @@ jobs:
       - name: Run goth snail quote script
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: python goth_snail_companions.py
+        run: python goth_snail_quotes.py
 
       - name: Commit and push changes
         run: |
