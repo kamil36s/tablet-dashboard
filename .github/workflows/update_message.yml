@@ -2,6 +2,8 @@ name: Auto update message
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 7 * * *'  # Every day at 7:00 UTC
 
 jobs:
   update:
@@ -23,3 +25,11 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: python auto_reminder_debug.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add message.txt
+          git commit -m "🤖 Auto-update message.txt" || echo "Nothing to commit"
+          git push
