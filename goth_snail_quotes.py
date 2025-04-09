@@ -2,6 +2,9 @@ from openai import OpenAI
 import os
 from datetime import datetime
 
+print("🔐 API key starts with:", os.getenv("OPENAI_API_KEY")[:8])
+print("🧾 Project ID:", os.getenv("OPENAI_PROJECT_ID"))
+
 # Initialize client using environment variables
 client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
